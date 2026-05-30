@@ -27,11 +27,9 @@ export function useInstallPrompt() {
   }
 
   onMounted(() => {
-    // Already installed (standalone mode)
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      isInstalled.value = true
-      return
-    }
+    // Already running as installed PWA — don't show banners, don't show toast
+    if (window.matchMedia('(display-mode: standalone)').matches) return
+
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt)
     window.addEventListener('appinstalled', onAppInstalled)
   })
