@@ -1,14 +1,51 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useExchangeRate } from '../composables/useExchangeRate.js'
 import { CURRENCIES, REGION_LABELS, REGION_COLORS } from '../data/currencies.js'
 
 const { rates, lastUpdate, loading, error, isOnline, fetchRates, convert } = useExchangeRate()
 
+const STORAGE_KEY = 'converter_prefs_v1'
+const DEFAULTS = { fromCurrency: 'USD', targetCurrencies: ['EUR', 'BRL', 'CRC'] }
+
+function loadPrefs() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return { ...DEFAULTS }
+    const parsed = JSON.parse(raw)
+    return {
+      fromCurrency: parsed.fromCurrency || DEFAULTS.fromCurrency,
+      targetCurrencies: Array.isArray(parsed.targetCurrencies) && parsed.targetCurrencies.length
+        ? parsed.targetCurrencies
+        : DEFAULTS.targetCurrencies,
+    }
+  } catch {
+    return { ...DEFAULTS }
+  }
+}
+
+function savePrefs() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    fromCurrency: fromCurrency.value,
+    targetCurrencies: targetCurrencies.value,
+  }))
+}
+
+function clearPrefs() {
+  localStorage.removeItem(STORAGE_KEY)
+  fromCurrency.value = DEFAULTS.fromCurrency
+  targetCurrencies.value = [...DEFAULTS.targetCurrencies]
+}
+
+const prefs = loadPrefs()
 const amount = ref(100)
-const fromCurrency = ref('USD')
-const targetCurrencies = ref(['EUR', 'BRL', 'CRC'])
+const fromCurrency = ref(prefs.fromCurrency)
+const targetCurrencies = ref(prefs.targetCurrencies)
 const showCurrencySelector = ref(false)
+
+// Persist on every change
+watch(fromCurrency, savePrefs)
+watch(targetCurrencies, savePrefs, { deep: true })
 
 const availableCurrencies = computed(() => {
   if (!rates.value) return CURRENCIES
@@ -89,6 +126,11 @@ function toggleAll() {
   } else {
     targetCurrencies.value = [...all]
   }
+}
+
+function resetAll() {
+  clearPrefs()
+  amount.value = 100
 }
 
 const allSelected = computed(() =>
@@ -246,8 +288,8 @@ const regionColor = (region) => REGION_COLORS[region] || '#6c757d'
             <button @click="toggleAll" class="btn btn-sm btn-outline-primary flex-grow-1" style="min-height:40px">
               {{ allSelected ? 'Quitar todo' : 'Seleccionar todo' }}
             </button>
-            <button @click="targetCurrencies = []" class="btn btn-sm btn-outline-secondary" style="min-height:40px">
-              Limpiar
+            <button @click="resetAll" class="btn btn-sm btn-outline-secondary" style="min-height:40px">
+              Limpiar todo
             </button>
           </div>
 
