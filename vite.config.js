@@ -7,7 +7,8 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/*.svg'],
+      injectRegister: 'auto',
+      includeAssets: ['icons/*.png', 'icons/*.svg'],
       manifest: {
         name: 'Tipo de Cambio Global',
         short_name: 'TipoCambio',
@@ -17,25 +18,31 @@ export default defineConfig({
         display: 'standalone',
         start_url: '/',
         lang: 'es',
+        orientation: 'portrait-primary',
+        categories: ['finance', 'utilities'],
         icons: [
           {
-            src: 'icons/icon-192.svg',
+            src: 'icons/icon-192.png',
             sizes: '192x192',
-            type: 'image/svg+xml',
+            type: 'image/png',
           },
           {
-            src: 'icons/icon-512.svg',
+            src: 'icons/icon-512.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
-            purpose: 'any maskable',
+            type: 'image/png',
+          },
+          {
+            src: 'icons/icon-maskable-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
           },
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,ico,woff,woff2}'],
+        globPatterns: ['**/*.{js,css,html,png,svg,ico,woff,woff2}'],
         runtimeCaching: [
           {
-            // Cache Bootstrap Icons fonts from node_modules (served as assets)
             urlPattern: /\.woff2?$/i,
             handler: 'CacheFirst',
             options: {
@@ -44,7 +51,6 @@ export default defineConfig({
             },
           },
           {
-            // Exchange rate API – NetworkFirst with localStorage fallback in app
             urlPattern: /^https:\/\/open\.er-api\.com\/.*/i,
             handler: 'NetworkFirst',
             options: {

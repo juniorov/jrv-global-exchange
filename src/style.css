@@ -86,6 +86,89 @@ body {
   50% { opacity: 0.4; }
 }
 
+/* ===== Header logo ===== */
+.header-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+/* ===== Install Banner (Android) ===== */
+.install-banner {
+  background: #eff6ff;
+  border-bottom: 1px solid #bfdbfe;
+}
+
+.install-banner__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+}
+
+.install-banner__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+}
+
+.install-banner__btn {
+  min-height: 36px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* ===== iOS tip ===== */
+.ios-tip {
+  background: #fff7ed;
+  border-bottom: 1px solid #fed7aa;
+}
+
+.ios-tip__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+}
+
+.ios-tip__text {
+  font-size: 0.85rem;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.ios-share-icon {
+  font-style: normal;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* ===== Installed toast ===== */
+.installed-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: white;
+  padding: 0.6rem 1.25rem;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  z-index: 9999;
+  white-space: nowrap;
+  animation: toast-in 0.25s ease;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 /* ===== Letter spacing utility ===== */
 .letter-spacing {
   letter-spacing: 0.06em;
