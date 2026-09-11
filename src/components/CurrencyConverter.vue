@@ -6,7 +6,7 @@ import { CURRENCIES, REGION_LABELS, REGION_COLORS } from '../data/currencies.js'
 const { rates, lastUpdate, loading, error, isOnline, fetchRates, convert } = useExchangeRate()
 
 const STORAGE_KEY = 'converter_prefs_v1'
-const DEFAULTS = { fromCurrency: 'USD', targetCurrencies: ['EUR', 'BRL', 'CRC'] }
+const DEFAULTS = { fromCurrency: 'EUR', targetCurrencies: ['CRC'] }
 
 function loadPrefs() {
   try {
