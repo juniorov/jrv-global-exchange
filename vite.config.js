@@ -41,9 +41,13 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,svg,ico,woff,woff2}'],
+        // bootstrap-icons agrega un query string de cache-busting a sus fuentes
+        // (p. ej. bootstrap-icons.woff2?e34853...); sin esto, ese query no coincide
+        // con la URL precacheada y deja las fuentes sin funcionar offline.
+        ignoreURLParametersMatching: [/./],
         runtimeCaching: [
           {
-            urlPattern: /\.woff2?$/i,
+            urlPattern: /\.woff2?(\?.*)?$/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'fonts-cache',
